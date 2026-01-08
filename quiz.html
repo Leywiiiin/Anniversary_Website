@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LDR Quiz 🧠</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❤️</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            background: #120a0d; 
+            color: #fff; 
+            font-family: 'Nunito', sans-serif; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; 
+            margin: 0; 
+            text-align: center; 
+            overflow-y: auto; 
+        }
+        
+        .bg { 
+            position: fixed; top:0; left:0; width:100%; height:100%; 
+            background: radial-gradient(circle at 50% 50%, #2c1b20 0%, #0a0506 100%); 
+            z-index: -1; 
+        }
+
+        .card { 
+            background: rgba(255,255,255,0.05); 
+            backdrop-filter: blur(15px); 
+            padding: 20px; 
+            border-radius: 20px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            width: 90%; 
+            max-width: 500px; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5); 
+            position: relative;
+            animation: popIn 0.5s ease;
+            max-height: 90vh;
+            overflow-y: auto; 
+        }
+        @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+        h2 { font-family: 'Pacifico'; color: #ffb7c5; font-size: 2rem; margin-top: 0; }
+        
+        .bet-box { 
+            background: rgba(255,183,197,0.1); 
+            border: 2px dashed #ffb7c5; 
+            padding: 15px; 
+            border-radius: 10px; 
+            margin-bottom: 20px; 
+            font-size: 0.95rem; 
+            line-height: 1.6;
+        }
+        .highlight { color: #a8e6cf; font-weight: bold; }
+
+        .progress-container { width: 100%; background: rgba(255,255,255,0.1); height: 8px; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+        .progress-bar { height: 100%; background: #ffb7c5; width: 0%; transition: width 0.5s ease; }
+
+        .btn { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 6px 0; 
+            background: rgba(255,255,255,0.05); 
+            border: 1px solid rgba(255,255,255,0.2); 
+            color: white; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-size: 0.95rem;
+            transition: 0.2s; 
+            font-family: 'Nunito', sans-serif;
+        }
+        .btn:active { transform: scale(0.98); }
+        .correct { background: #4caf50 !important; border-color: #4caf50 !important; } 
+        .wrong { background: #f44336 !important; border-color: #f44336 !important; animation: shake 0.4s; }
+
+        .reward-section { display: none; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
+        .reward-media { 
+            width: 100%; 
+            border-radius: 10px; 
+            border: 3px solid #ffb7c5; 
+            margin-bottom: 10px; 
+            background: black;
+        }
+        
+        .hidden { display: none; }
+        @keyframes shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-5px);} 75%{transform:translateX(5px);} }
+    </style>
+</head>
+<body>
+    
+    <audio id="quiz-bg" loop><source src="assets/quiz_bg.mp3" type="audio/mpeg"></audio>
+    <audio id="correct-sound"><source src="assets/correct.mp3" type="audio/mpeg"></audio>
+    <audio id="wrong-sound"><source src="assets/wrong.mp3" type="audio/mpeg"></audio>
+
+    <div class="bg"></div>
+    
+    <div class="card">
+        
+        <!-- START SCREEN -->
+        <div id="start">
+            <h2>Anniversary Quiz 🧠</h2>
+            <div class="bet-box">
+                <strong>⚠️ THE STAKES ⚠️</strong><br>
+                <span style="font-size:0.85rem">Get 3/3 Correct to win:</span><br>
+                <span class="highlight">I owe you a Dinner Date! 🍕</span><br>
+                (Plus a secret video unlock)<br><br>
+                <span style="font-size:0.85rem">If you lose:</span><br>
+                <span class="highlight">You owe me a 10-min Back Scratch 💆‍♂️</span>
+            </div>
+            <button class="btn" style="background: linear-gradient(45deg, #ffb7c5, #e8a5b0); color: #120a0d; font-weight:bold;" onclick="startGame()">
+                Accept Challenge 🎵
+            </button>
+            <button class="btn" style="background:transparent; border:none; font-size:0.8rem; opacity:0.6;" onclick="location.href='main.html'">
+                No thanks, take me home
+            </button>
+        </div>
+
+        <!-- GAME SCREEN -->
+        <div id="game" class="hidden">
+            <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+            <h3 id="qText" style="font-size:1.2rem; margin-bottom:15px;">Question</h3>
+            <div id="opts"></div>
+        </div>
+
+        <!-- END SCREEN -->
+        <div id="end" class="hidden">
+            <h2 id="resTitle"></h2>
+            <p id="resMsg" style="margin-bottom:20px;"></p>
+            
+            <!-- REWARD -->
+            <div id="reward" class="reward-section">
+                <h3 style="color:#a8e6cf; font-family:'Pacifico'; margin-bottom:10px;">Secret Unlocked! 🔓</h3>
+                <video src="assets/reward_video.mp4" class="reward-media" controls></video>
+            </div>
+
+            <button class="btn" id="retryBtn" onclick="resetQuiz()" style="margin-top:20px;">Try Again 🔄</button>
+            <button class="btn" onclick="location.href='main.html'" style="background: #ffb7c5; color: #120a0d; margin-top:10px;">Back Home 🏠</button>
+        </div>
+
+    </div>
+
+    <script>
+        const questions = [
+            {
+                q: "When did we officially start dating? ❤️", 
+                o: ["\"this land was promised to me\" ahh answer", "dec 9th, 2025", "imma kick your balls lil bro", "when i stole your bread", "lets make out 🫦"], 
+                a: [2, 3, 4]
+            },
+            {
+                q: "how long do you think my ass hair is 😭😭", 
+                o: ["imma put a strap on lil bro", "really long", "imma twirl them and rip it apart", "show yo ass cheeks pretty boi", "lets make out plss 🫦👅"], 
+                a: [1, 2, 4]
+            },
+            {
+                q: "What is our favorite LDR activity? 🤔", 
+                o: ["Sleeping on Call 😴", "Making out and yearn", "yearn to makeout", "yearn to makeout and fuck. i said what i said"], 
+                a: [0, 1, 2, 3]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        const TARGET_VOL = 0.3; 
+        const LOW_VOL = 0.05;
+
+        function startGame() { 
+            document.getElementById('start').classList.add('hidden'); 
+            document.getElementById('game').classList.remove('hidden'); 
+            
+            const bgm = document.getElementById('quiz-bg');
+            bgm.volume = TARGET_VOL;
+            bgm.currentTime = 0;
+            bgm.play();
+            
+            loadQuestion(); 
+        }
+
+        // --- FIXED RESET FUNCTION ---
+        function resetQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            document.getElementById('end').classList.add('hidden');
+            document.getElementById('start').classList.remove('hidden');
+            document.getElementById('progressBar').style.width = '0%';
+            
+            // Hide reward in case it was open
+            document.getElementById('reward').style.display = 'none';
+            document.getElementById('retryBtn').style.display = 'block';
+
+            // Reset Audio
+            const bgm = document.getElementById('quiz-bg');
+            bgm.pause();
+            bgm.currentTime = 0;
+            bgm.volume = TARGET_VOL;
+        }
+
+        function loadQuestion() {
+            document.getElementById('qText').innerText = questions[currentQuestion].q;
+            document.getElementById('progressBar').style.width = ((currentQuestion / questions.length) * 100) + '%';
+            const div = document.getElementById('opts'); 
+            div.innerHTML = '';
+            questions[currentQuestion].o.forEach((opt, index) => {
+                const btn = document.createElement('button'); 
+                btn.className = 'btn'; 
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(index, btn); 
+                div.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedIndex, btnElement) {
+            if(navigator.vibrate) navigator.vibrate(50);
+
+            const correctAnswers = questions[currentQuestion].a;
+            const isCorrect = correctAnswers.includes(selectedIndex);
+            let sfx;
+
+            if(isCorrect) { 
+                btnElement.classList.add('correct'); 
+                score++; 
+                sfx = document.getElementById('correct-sound');
+            } else { 
+                btnElement.classList.add('wrong'); 
+                sfx = document.getElementById('wrong-sound');
+            }
+            
+            playWithDuck(sfx);
+
+            document.querySelectorAll('.btn').forEach(b => b.disabled = true);
+            
+            setTimeout(() => { 
+                currentQuestion++; 
+                currentQuestion < questions.length ? loadQuestion() : endGame(); 
+            }, 1500);
+        }
+
+        function playWithDuck(sfxElement) {
+            const bgm = document.getElementById('quiz-bg');
+            let fadeOut = setInterval(() => {
+                if (bgm.volume > LOW_VOL) {
+                    bgm.volume = Math.max(LOW_VOL, bgm.volume - 0.05);
+                } else {
+                    clearInterval(fadeOut);
+                }
+            }, 50);
+
+            sfxElement.currentTime = 0;
+            sfxElement.play();
+
+            sfxElement.onended = () => {
+                let fadeIn = setInterval(() => {
+                    if (bgm.volume < TARGET_VOL) {
+                        bgm.volume = Math.min(TARGET_VOL, bgm.volume + 0.05);
+                    } else {
+                        clearInterval(fadeIn);
+                    }
+                }, 50);
+            };
+        }
+
+        function endGame() {
+            document.getElementById('game').classList.add('hidden'); 
+            document.getElementById('end').classList.remove('hidden');
+            document.getElementById('progressBar').style.width = '100%';
+            
+            const title = document.getElementById('resTitle'); 
+            const msg = document.getElementById('resMsg');
+
+            if(score === questions.length) { 
+                title.innerText = "PERFECT SCORE! 🎉"; 
+                msg.innerText = "You win the Dinner Date! And here is your video..."; 
+                document.getElementById('reward').style.display='block'; 
+                document.getElementById('retryBtn').style.display='none';
+                triggerConfetti();
+            } else { 
+                title.innerText = `Score: ${score}/${questions.length} 😐`; 
+                msg.innerText = "So close! But a deal is a deal... get those hands ready for a back scratch!"; 
+                document.getElementById('reward').style.display='none';
+                document.getElementById('retryBtn').style.display='block';
+            }
+        }
+
+        function triggerConfetti() {
+            const c = document.createElement('canvas'); 
+            c.style.position = 'fixed'; c.style.top = '0'; c.style.left = '0'; 
+            c.style.width = '100%'; c.style.height = '100%'; 
+            c.style.pointerEvents = 'none'; c.style.zIndex='99'; 
+            document.body.appendChild(c);
+            const x = c.getContext('2d'); 
+            c.width = window.innerWidth; c.height = window.innerHeight;
+            let p = []; 
+            for(let i=0; i<100; i++) p.push({x:Math.random()*c.width, y:Math.random()*c.height, c:['#ffb7c5','#a8e6cf','#fff'][Math.floor(Math.random()*3)], s:Math.random()*5+2});
+            function d() { 
+                x.clearRect(0,0,c.width,c.height); 
+                p.forEach(e => { x.fillStyle=e.c; x.fillRect(e.x,e.y,6,6); e.y+=e.s; if(e.y>c.height)e.y=0; }); 
+                requestAnimationFrame(d); 
+            } 
+            d(); 
+            setTimeout(()=>c.remove(),5000);
+        }
+    </script>
+</body>
+</html>

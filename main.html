@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Anniversary! ❤️</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❤️</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Nunito:wght@400;700&family=Pacifico&family=Courier+Prime&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-dark: #120a0d; --primary: #ffb7c5; --accent: #a8e6cf; --glass: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Nunito', sans-serif; background-color: var(--bg-dark); color: #f0f0f0; overflow-x: hidden; padding-bottom: 120px; cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23ffb7c5"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') 12 12, auto; }
+        
+        /* Background & Anim */
+        .bg-mesh { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 50%, #2c1b20 0%, #0a0506 100%); z-index: -2; }
+        .hidden-section { opacity: 0; transform: translateY(30px); transition: 1s; } .show-section { opacity: 1; transform: translateY(0); }
+        .heart-trail { position: fixed; pointer-events: none; z-index: 9999; animation: floatUp 1s linear forwards; opacity: 0.8; font-size: 1.2rem; }
+        @keyframes floatUp { 100% { transform: translateY(-40px) scale(1.5); opacity: 0; } }
+
+        /* Hug Shower Animation */
+        .hug-emoji { position: fixed; top: -50px; font-size: 2.5rem; z-index: 10000; pointer-events: none; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+        .hug-btn { 
+            font-size: 1.2rem; padding: 15px 30px; background: #ffb7c5; color: #120a0d; font-weight: bold;
+            border-radius: 50px; border: none; cursor: pointer; animation: pulse 1.5s infinite; 
+            box-shadow: 0 0 15px rgba(255, 183, 197, 0.5); margin-top: 10px;
+        }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+        /* Nav */
+        .nav-bar { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 450px; background: rgba(20, 10, 13, 0.8); backdrop-filter: blur(15px); border-radius: 50px; display: flex; justify-content: space-evenly; padding: 12px 0; z-index: 1000; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .nav-item { font-size: 1.2rem; cursor: pointer; transition: 0.3s; opacity: 0.8; }
+        .nav-item:hover { transform: scale(1.2); opacity: 1; text-shadow: 0 0 10px var(--primary); }
+
+        /* General Layout */
+        .container { max-width: 600px; width: 90%; margin: 90px auto 0 auto; }
+        .glass { background: var(--glass); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 20px; padding: 30px; margin-bottom: 30px; position: relative; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+        
+        /* Letter */
+        #typewriter { font-family: 'Dancing Script', cursive; font-size: 1.4rem; line-height: 1.6; color: #fff0f5; text-shadow: 0 0 5px rgba(255, 183, 197, 0.3); white-space: pre-wrap; }
+        .cursor { display: inline-block; width: 2px; height: 20px; background-color: var(--primary); animation: blink 1s infinite; margin-left: 2px; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* Music & Voice */
+        .music-player { display: flex; align-items: center; gap: 15px; padding: 10px 20px; background: rgba(0,0,0,0.3); border-radius: 50px; width: fit-content; margin: 0 auto; border: 1px solid var(--border); cursor: pointer; }
+        .disc { font-size: 1.5rem; animation: spin 3s linear infinite; animation-play-state: paused; } .playing .disc { animation-play-state: running; } @keyframes spin { 100% { transform: rotate(360deg); } }
+        .voice-grid { display: flex; flex-direction: column; gap: 10px; }
+        .voice-btn { background: rgba(255,255,255,0.1); border: 1px solid var(--border); padding: 15px; border-radius: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
+        .voice-btn:hover { background: rgba(255, 183, 197, 0.2); }
+
+        /* Timeline */
+        .timeline { position: relative; padding-left: 30px; border-left: 2px solid var(--primary); margin: 30px 0; }
+        .timeline-item { position: relative; margin-bottom: 30px; } .timeline-item::before { content: '❤️'; position: absolute; left: -39px; top: 0; background: var(--bg-dark); }
+        .date { font-size: 0.8rem; color: var(--accent); font-family: 'Courier Prime'; }
+
+        /* --- SLIDABLE GALLERY --- */
+        .gallery-grid { display: flex; flex-direction: column; align-items: center; gap: 50px; }
+        
+        .polaroid-stack {
+            position: relative;
+            width: 300px;
+            height: 400px; /* Portrait Default */
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        .polaroid-stack.landscape { height: 280px; width: 340px; }
+
+        /* The Hidden Note */
+        .polaroid-note {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #fff0f5; 
+            color: #2c1b20;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.2rem;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.05);
+            z-index: 1;
+        }
+        .polaroid-note h4 { font-family: 'Nunito', sans-serif; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 10px; color: #555; letter-spacing: 2px; }
+
+        /* The Photo */
+        .polaroid-frame {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: white;
+            padding: 15px 15px 70px 15px; /* Polaroid borders */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            z-index: 5;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            transform-origin: bottom center;
+        }
+        
+        .polaroid-frame img { width: 100%; height: 100%; object-fit: cover; border: 1px solid #eee; }
+
+        .polaroid-frame::after {
+            content: ''; position: absolute; bottom: 20px; right: 20px; width: 24px; height: 24px; opacity: 0.7;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'%3E%3C/path%3E%3C/svg%3E") no-repeat center/contain;
+        }
+
+        .enlarge-btn {
+            position: absolute; bottom: 20px; left: 20px; width: 30px; height: 30px;
+            background: rgba(0,0,0,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; color: #333; cursor: pointer; transition: 0.2s; z-index: 10;
+        }
+        .enlarge-btn:hover { background: rgba(0,0,0,0.2); transform: scale(1.1); }
+
+        /* Animation State */
+        .reveal-mode .polaroid-frame {
+            transform: translateY(20%) scale(0.9);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* --- UTILS --- */
+        .cat-companion { position: fixed; bottom: 20px; right: 20px; z-index: 2000; cursor: pointer; font-size: 3.5rem; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); transition: transform 0.2s; } .cat-companion:active { transform: scale(0.9); }
+        .chat-bubble { position: absolute; bottom: 70px; right: 0; background: white; color: #333; padding: 8px 15px; border-radius: 15px 15px 0 15px; font-weight: bold; opacity: 0; pointer-events: none; transition: 0.3s; width: max-content; font-family: 'Nunito'; font-size: 0.9rem;} .chat-bubble.show { opacity: 1; transform: translateY(-10px); }
+        .secret-heart { position: fixed; bottom: 30px; left: 30px; font-size: 1.5rem; opacity: 0.3; z-index: 2000; cursor: pointer; }
+        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #120a0d; padding: 30px; width: 85%; max-width: 400px; z-index: 5000; border: 2px solid var(--primary); text-align: center; border-radius: 20px; }
+        .modal h2 { color: var(--primary); font-family: 'Pacifico'; margin-bottom: 10px; }
+        .close-txt { font-size: 0.8rem; text-decoration: underline; margin-top: 15px; cursor: pointer; opacity: 0.7; }
+        .btn { width: 100%; padding: 12px; border-radius: 30px; background: var(--primary); border: none; color: #120a0d; font-weight: bold; margin-top: 15px; cursor: pointer; }
+        .wish-input { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: white; padding: 15px; border-radius: 10px; margin-top: 10px; font-family: 'Nunito'; }
+        .envelopes-grid { display: flex; gap: 10px; margin-top: 20px; }
+        .envelope { background: linear-gradient(135deg, #2c1b20, #4a2c34); border: 1px solid var(--primary); border-radius: 10px; padding: 20px 10px; text-align: center; cursor: pointer; flex: 1; }
+        .envelope:hover { transform: translateY(-5px); }
+        h1, h2, h3 { font-family: 'Pacifico', cursive; color: var(--primary); }
+
+        /* Lightbox */
+        .lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; justify-content: center; align-items: center; animation: fadeIn 0.3s; }
+        .lightbox img { max-width: 90%; max-height: 80vh; border: 5px solid white; border-radius: 5px; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
+        .lightbox-close { position: absolute; top: 20px; right: 20px; color: white; font-size: 2rem; cursor: pointer; }
+        @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+    </style>
+</head>
+<body>
+    <!-- AUDIO -->
+    <audio id="bg-music" loop><source src="assets/music.mp3" type="audio/mpeg"></audio>
+    <audio id="voice-player"></audio>
+    <audio id="cat-sound"><source src="assets/cat_meow.mpeg" type="audio/mpeg"></audio>
+    
+    <div class="bg-mesh"></div>
+    <canvas id="fireflies" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1; pointer-events:none;"></canvas>
+
+    <div class="cat-companion" onclick="catSpeak()"><div class="chat-bubble" id="catMsg">Meow!</div><div class="cat-emoji">🐈‍⬛</div></div>
+    <div class="secret-heart" onclick="openModal('comfort')">❤️</div>
+
+    <nav class="nav-bar">
+        <div class="nav-item" onclick="scrollToId('home')">🏠</div>
+        <div class="nav-item" onclick="scrollToId('letter-section')">💌</div>
+        <div class="nav-item" onclick="scrollToId('voices')">🎙️</div>
+        <div class="nav-item" onclick="scrollToId('gallery')">🖼️</div>
+        <div class="nav-item" onclick="window.location.href='quiz.html'">🧠</div>
+    </nav>
+
+    <div class="container">
+        <!-- HOME -->
+        <div id="home" class="hidden-section">
+            <h1 id="dynamic-greeting" style="text-align:center; font-size:2.8rem;">Happy 1st Month</h1>
+            <div class="music-player" onclick="toggleMusic()">
+                <div class="disc">💿</div><div><h5 style="margin:0;">Our Song</h5><p style="margin:0; font-size:0.7rem; opacity:0.7;">Tap to play</p></div>
+            </div>
+            <div class="glass" style="text-align:center; margin-top:20px; border: 2px dashed var(--primary);">
+                <p style="opacity:0.7; font-size:0.8rem;">LOVING YOU FOR</p>
+                <h2 id="timer" style="font-size:1.4rem;">00d 00h 00m</h2>
+            </div>
+        </div>
+
+        <!-- LOVE JAR -->
+        <div class="glass hidden-section" style="text-align:center;">
+            <h3 style="margin-bottom:10px;">The Love Jar 🏺</h3>
+            <p style="font-size:0.8rem; margin-bottom:20px;">Tap for a random note!</p>
+            <div id="love-jar" onclick="pullNote()" style="font-size:4rem; cursor:pointer; transition:transform 0.2s;">🏺</div>
+            <div id="note-display" style="margin-top:20px; font-family:'Dancing Script'; font-size:1.5rem; color:var(--primary); min-height:50px; opacity:0; transition:opacity 0.5s;"></div>
+        </div>
+
+        <!-- LETTER -->
+        <div id="letter-section" class="glass hidden-section">
+            <div style="font-size:2rem; text-align:center; margin-bottom:20px;">💌</div>
+            <div id="typewriter"></div><span class="cursor"></span>
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); margin-top: 20px; padding-top: 10px;">
+                <h4 style="text-align:center; opacity:0.8;">Open When You Are...</h4>
+                <div class="envelopes-grid">
+                    <div class="envelope" onclick="openModal('stressed')">Stressed</div>
+                    <div class="envelope" onclick="openModal('happy')">Happy</div>
+                    <div class="envelope" onclick="openModal('lonely')">Lonely</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VOICE LIBRARY -->
+        <div id="voices" class="glass hidden-section">
+            <h3 style="text-align:center; margin-bottom:20px;">Voice Notes 🎙️</h3>
+            <div class="voice-grid">
+                <div class="voice-btn" onclick="event.stopPropagation(); playVoice('assets/voice_funny.mpeg')">
+                    <span>Retardness 😈</span><span>▶️</span>
+                </div>
+                <div class="voice-btn" onclick="event.stopPropagation(); playVoice('assets/voice_morning.mpeg')">
+                    <span>For my baby mwah 🐈‍⬛👅</span><span>▶️</span>
+                </div>
+                <div class="voice-btn" onclick="event.stopPropagation(); playVoice('assets/voice_missyou.aac')">
+                    <span>whimper 🫦</span><span>▶️</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- TIMELINE -->
+        <div class="glass hidden-section">
+            <h3 style="text-align:center;">Our Journey 🛫</h3>
+            <div class="timeline">
+                <div class="timeline-item"><div class="date">Nov 4, 2025</div><div class="event">Met Online 💻</div><p style="font-size:0.9rem;">One message changed everything.</p></div>
+                <div class="timeline-item"><div class="date">Dec 9, 2025</div><div class="event">Official! ❤️</div><p style="font-size:0.9rem;">Best decision ever made.</p></div>
+                <div class="timeline-item"><div class="date">Today</div><div class="event">1st Month 🎉</div><p style="font-size:0.9rem;">Distance means nothing.</p></div>
+            </div>
+        </div>
+
+        <!-- GALLERY -->
+        <div id="gallery" class="hidden-section">
+            <h2 style="text-align:center; margin-bottom:20px; color:var(--accent);">Why I Love This Pic</h2>
+            <p style="text-align:center; font-size:0.8rem; margin-bottom:30px; opacity:0.7;">Tap photo to reveal note 👉<br>(Tap 🔍 for full image)</p>
+            
+            <div class="gallery-grid">
+                <!-- PIC 1 -->
+                <div class="polaroid-stack" onclick="toggleReveal(this)">
+                    <div class="polaroid-note">
+                        <h4>The First Pic</h4>
+                        <p>"THIS ONE IS THE FIRST EVER PICTURE YOU SEND ME AHHH SO PRETTY AHH WOMAN. this picture holds special to me for that (my woman is really pretty btw mwah)"</p>
+                    </div>
+                    <div class="polaroid-frame">
+                        <img src="assets/pic1.jpeg">
+                        <div class="enlarge-btn" onclick="openLightbox('assets/pic1.jpeg'); event.stopPropagation();">🔍</div>
+                    </div>
+                </div>
+                <!-- PIC 2 -->
+                <div class="polaroid-stack" onclick="toggleReveal(this)">
+                    <div class="polaroid-note">
+                        <h4>My Favorite</h4>
+                        <p>"This is the one i like the most right now you look soo prettty ahhhhhhhhhhhhh. i wanna makeout BAHAHAA"</p>
+                    </div>
+                    <div class="polaroid-frame">
+                        <img src="assets/pic2.jpeg">
+                        <div class="enlarge-btn" onclick="openLightbox('assets/pic2.jpeg'); event.stopPropagation();">🔍</div>
+                    </div>
+                </div>
+                <!-- PIC 3 -->
+                <div class="polaroid-stack" onclick="toggleReveal(this)">
+                    <div class="polaroid-note">
+                        <h4>Goofy You</h4>
+                        <p>"BAHAHAHA i found ts really goofy dawg you look so pretty BUT GOOFY AS HELL LEMMEE EYP ANYWAYS"</p>
+                    </div>
+                    <div class="polaroid-frame">
+                        <img src="assets/pic3.jpeg">
+                        <div class="enlarge-btn" onclick="openLightbox('assets/pic3.jpeg'); event.stopPropagation();">🔍</div>
+                    </div>
+                </div>
+                <!-- PIC 4 -->
+                <div class="polaroid-stack landscape" onclick="toggleReveal(this)">
+                    <div class="polaroid-note">
+                        <h4>Your Eyes</h4>
+                        <p>"I fell for your eyes the moment i saw your eyes. yk how much i love your eyes waking up feeling happy its mine everyday to stare at. (pls lemme do missionary BAHAHAHAHAHA)"</p>
+                    </div>
+                    <div class="polaroid-frame">
+                        <img src="assets/pic4.jpeg">
+                        <div class="enlarge-btn" onclick="openLightbox('assets/pic4.jpeg'); event.stopPropagation();">🔍</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUIZ INVITE -->
+        <div class="glass hidden-section" style="text-align:center; border: 2px dashed var(--accent); margin-top: 40px;">
+            <h3 style="margin-bottom:10px;">Think You Know Me? 😼</h3>
+            <p style="font-size:0.9rem; margin-bottom:20px; opacity:0.9;">I bet you can't get 100% on this anniversary trivia.<br><strong>Warning:</strong> Stakes are involved!</p>
+            <button class="btn" onclick="window.location.href='quiz.html'" style="background: linear-gradient(45deg, var(--accent), #56ab2f); color: #120a0d; font-size:1.1rem; padding: 15px;">Play the LDR Quiz 🧠</button>
+        </div>
+
+   <!-- WISHLIST (AJAX VERSION) -->
+        <div id="wishes" class="glass hidden-section">
+            <h3 style="color:var(--primary);">Future Plans ✨</h3>
+            <p style="font-size:0.8rem;">First thing we'll do when we meet?</p>
+            
+            <!-- Replace YOUR_EMAIL below -->
+            <form id="wishForm" action="https://formsubmit.co/ajax/frhhnshahul@gmail.com" method="POST">
+                <textarea name="wish" class="wish-input" placeholder="I want to..." required></textarea>
+                <button type="submit" class="btn" id="sendBtn">Send 💌</button>
+            </form>
+            <p id="form-status" style="display:none; margin-top:10px; color:#a8e6cf;">Message Sent! ❤️</p>
+        </div>
+
+        <script>
+            // ADD THIS SCRIPT RIGHT HERE INSIDE THE WISHES DIV OR AT THE BOTTOM
+            document.getElementById('wishForm').addEventListener('submit', function(e) {
+                e.preventDefault(); // Stops the page from redirecting
+                
+                const btn = document.getElementById('sendBtn');
+                const status = document.getElementById('form-status');
+                
+                btn.innerText = "Sending...";
+                
+                fetch(this.action, {
+                    method: 'POST',
+                    body: new FormData(this)
+                })
+                .then(response => {
+                    btn.innerText = "Sent! 💌";
+                    btn.style.background = "#4caf50";
+                    this.reset(); // Clears the text box
+                    status.style.display = "block";
+                    // Confetti trigger
+                    catSpeak("Message Received! 📨");
+                    setTimeout(() => {
+                        btn.innerText = "Send 💌";
+                        btn.style.background = "var(--primary)";
+                        status.style.display = "none";
+                    }, 3000);
+                })
+                .catch(error => {
+                    btn.innerText = "Error :(";
+                    alert("Oops! Something went wrong. Check your connection.");
+                });
+            });
+        </script>
+
+    <!-- Modals -->
+    <div id="universalModal" class="modal"><h2 id="mTitle"></h2><div id="mBody"></div><p class="close-txt" onclick="document.getElementById('universalModal').style.display='none'">Close</p></div>
+    <div id="passwordModal" class="modal">
+        <h2>Comfort Mode ☁️</h2><p>Enter code for a hug:</p>
+        <input type="password" id="sadPass" class="wish-input" style="text-align:center;" placeholder="Code: Faru">
+        <button class="btn" onclick="checkSad()">Unlock</button>
+        <p class="close-txt" onclick="document.getElementById('passwordModal').style.display='none'">Close</p>
+    </div>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <img id="lightbox-img" src="">
+    </div>
+
+    <script>
+        // 1. Reveal Logic
+        function toggleReveal(clickedCard) {
+            const allCards = document.querySelectorAll('.polaroid-stack');
+            allCards.forEach(card => { if (card !== clickedCard) card.classList.remove('reveal-mode'); });
+            clickedCard.classList.toggle('reveal-mode');
+        }
+        function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').style.display = 'flex'; }
+        function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
+
+        // 2. Audio Control
+        function playVoice(f) { 
+            const cat = document.getElementById('cat-sound'); cat.pause(); cat.currentTime=0;
+            const bgm = document.getElementById('bg-music');
+            
+            // PAUSE BGM
+            bgm.pause();
+
+            const p = document.getElementById('voice-player'); 
+            p.src=f; 
+            p.play(); 
+            
+            const b=document.getElementById('catMsg'); b.innerText="Listening... 🎙️"; b.classList.add('show'); 
+            setTimeout(()=>b.classList.remove('show'),2000); 
+
+            // RESUME BGM WHEN DONE
+            p.onended = function() {
+                bgm.play();
+            };
+        }
+        
+        function catSpeak(msg) {
+            const p = document.getElementById('voice-player'); p.pause();
+            const phrases=["Distance sucks! 😿","You're worth it ❤️","Check wifi! 📶","I miss you! 😽","Call me? 📞"];
+            const b=document.getElementById('catMsg'); b.innerText=msg||phrases[Math.floor(Math.random()*phrases.length)]; 
+            b.classList.add('show'); setTimeout(()=>b.classList.remove('show'),2000); 
+            const s=document.getElementById('cat-sound'); s.currentTime=0; s.play();
+        }
+
+        const audio = document.getElementById('bg-music');
+        function toggleMusic() { if(audio.paused){audio.play();document.querySelector('.music-player').classList.add('playing');}else{audio.pause();document.querySelector('.music-player').classList.remove('playing');} }
+
+        // 3. Other Logic
+        const hour = new Date().getHours(); const gr = document.getElementById('dynamic-greeting');
+        if(hour<12) gr.innerText="Good Morning Babee ☀️"; else if(hour<18) gr.innerText="Good Afternoon Love 🌤️"; else gr.innerText="Good Evening My Heart 🌙";
+
+        const txt = "HEYY BABYY MWAAAH ❤️ \n\nHAPPY ONE MONTHVERSARRY RAAAH 👅😈 \n\nI tried my best with this website to make your day better. I want to give you more than this, more than just words. I want to prove it. I am working on it babe. \n\nI will make sure we both will have each other in the near future mhm? \n\nPFFFT aside from that, I am glad we stayed even though we fought. I am happy we bended for each other, we made time for each other, and we talked it out. \n\nThank you for staying babe. I really wish to be with you at the end. I want to be your light even during your darkest hours. I will stay no matter what. \n\nI love you sm. HAPPY ONE MONTHVERSAARY MWAAAAH 💋💋";
+        let i=0; function type(){if(i<txt.length){document.getElementById("typewriter").innerHTML+=txt.charAt(i)==='\n'?'<br>':txt.charAt(i);i++;setTimeout(type,50);}}setTimeout(type,1000);
+
+        const notes = ["I love your laugh.", "You are my safe space.", "Distance means nothing.", "You are worth it.", "I can't wait to hug you."];
+        function pullNote() {
+            const j = document.getElementById('love-jar'); j.style.transform = "rotate(20deg)";
+            setTimeout(()=>j.style.transform="rotate(-20deg)",100); setTimeout(()=>j.style.transform="rotate(0deg)",300);
+            setTimeout(()=>{
+                document.getElementById('note-display').innerText=`"${notes[Math.floor(Math.random()*notes.length)]}"`;
+                document.getElementById('note-display').style.opacity="1";
+                // FIXED: Visual text only, no audio call
+                const b = document.getElementById('catMsg'); 
+                b.innerText = "Aww! 😻"; 
+                b.classList.add('show');
+                setTimeout(() => b.classList.remove('show'), 2000);
+            },300);
+        }
+
+        const content = {'stressed':{t:"Deep Breath 🌿",b:"Stop. Close your eyes. I am proud of you. You got this."},'happy':{t:"YAY! 🎉",b:"I wish I was there to celebrate! Keep smiling."},'lonely':{t:"I'm Here 🫂",b:"Look at the moon. I'm looking at it too. Call me?"}};
+        function openModal(k) {
+            if(k==='comfort'){document.getElementById('passwordModal').style.display='block';return;}
+            if(k==='hug'){
+                document.getElementById('mTitle').innerText="Virtual Hugs 🤗";
+                document.getElementById('mBody').innerHTML=`<p>I'm sending you the biggest hug ever!</p><button class="hug-btn" onclick="triggerHugs()">RECEIVE HUG 🫂</button>`;
+                document.getElementById('universalModal').style.display='block';
+                return;
+            }
+            document.getElementById('mTitle').innerText=content[k].t; document.getElementById('mBody').innerText=content[k].b; document.getElementById('universalModal').style.display='block';
+        }
+        function checkSad() { 
+            if(document.getElementById('sadPass').value==="Faru"){
+                document.getElementById('passwordModal').style.display='none'; openModal('hug');
+            } else alert("Wrong code :("); 
+        }
+
+        function triggerHugs() {
+            // Updated: Visual text only, no audio
+            const b = document.getElementById('catMsg');
+            b.innerText = "HUGGING YOU!! 🫂❤️";
+            b.classList.add('show');
+            setTimeout(() => b.classList.remove('show'), 2000);
+
+            for(let i=0; i<30; i++) {
+                const h = document.createElement('div');
+                h.innerText = ['🤗','🫂','❤️','🧸'][Math.floor(Math.random()*4)];
+                h.className = 'hug-emoji';
+                h.style.left = Math.random() * 100 + 'vw';
+                h.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                document.body.appendChild(h);
+                setTimeout(() => h.remove(), 5000);
+            }
+        }
+
+        const start = new Date(2025, 11, 9).getTime();
+        setInterval(()=>{const diff=new Date().getTime()-start;document.getElementById("timer").innerText=`${Math.floor(diff/(1000*60*60*24))}d ${Math.floor((diff%(1000*60*60*24))/(1000*60*60))}h`;},1000);
+
+        // 1. AUTOPLAY FAIL-SAFE
+        window.addEventListener('load', () => {
+            const bgm = document.getElementById('bg-music');
+            const p = bgm.play();
+            if(p !== undefined) {
+                p.catch(error => {
+                    document.body.addEventListener('click', () => {
+                        bgm.play();
+                        document.querySelector('.music-player').classList.add('playing');
+                    }, { once: true });
+                });
+            } else {
+                document.querySelector('.music-player').classList.add('playing');
+            }
+        });
+
+        document.addEventListener('mousemove',e=>h(e.clientX,e.clientY)); document.addEventListener('touchmove',e=>h(e.touches[0].clientX,e.touches[0].clientY));
+        function h(x,y){const d=document.createElement('div');d.className='heart-trail';d.innerHTML='❤️';d.style.left=x+'px';d.style.top=y+'px';document.body.appendChild(d);setTimeout(()=>d.remove(),1000);}
+        function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
+        const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('show-section')})});
+        document.querySelectorAll('.hidden-section').forEach(el=>obs.observe(el));
+        const c=document.getElementById("fireflies"),x=c.getContext("2d");c.width=window.innerWidth;c.height=window.innerHeight;
+        let p=[]; for(let k=0;k<50;k++)p.push({x:Math.random()*c.width,y:Math.random()*c.height,s:Math.random()*2,d:Math.random()});
+        function anim(){x.clearRect(0,0,c.width,c.height);p.forEach(e=>{x.beginPath();x.arc(e.x,e.y,e.s,0,Math.PI*2);x.fillStyle=`rgba(255,183,197,${e.d})`;x.fill();e.y-=0.5;if(e.y<0)e.y=c.height;e.d+=0.01;if(e.d>1)e.d=0.2;});requestAnimationFrame(anim);}anim();
+    </script>
+</body>
+</html>
